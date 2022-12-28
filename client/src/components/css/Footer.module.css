@@ -1,0 +1,15 @@
+.container {
+  
+    text-align: center;
+    
+    
+}
+
+.title {
+    background-color: black;
+    color: white;
+}
+
+.linkedin {
+    background-image: url('../../img/linkedin.png');
+}
