@@ -74,7 +74,6 @@ const Home = () => {
   };
 
   const openNav = () => {
-    
     document.getElementById("myNav").style.width = "100%";
   };
 
@@ -94,44 +93,58 @@ const Home = () => {
           >
             &times;
           </a>
-          
-          
-          <nav className={style.navbar}>
+
+          <nav >
             <Link to="/">
-              <button>Start</button>
-            </Link>
-            <Link to="/create">
-              <button>Create Video game</button>
+              <button className={style.start}>Welcome</button>
             </Link>
 
-            <button onClick={(e) => handleClick(e)}>Cargar de nuevo</button>
+            <div className={style.navbar}>
+              <Link to="/create" className={style.createGame}>
+                <button>Create Video Game</button>
+              </Link>
 
-            <select onChange={(e) => handleOrderByName(e)}>
-              <option value="order">Order</option>
-              <option value="asc">Ascendente</option>
-              <option value="desc">Descendente</option>
-            </select>
+              <button onClick={(e) => handleClick(e)}>Cargar de nuevo</button>
 
-            <select onChange={(e) => handleFilterByGenre(e)}>
-              <option value="All">Genres</option>
+              <select
+                onChange={(e) => handleOrderByName(e)}
+                className={style.order}
+              >
+                <option value="order">Order</option>
+                <option value="asc">Ascendente</option>
+                <option value="desc">Descendente</option>
+              </select>
 
-              {genres?.map((g, i) => {
-                return (
-                  <option key={i} value={g.name}>
-                    {g.name}
-                  </option>
-                );
-              })}
-            </select>
+              <select
+                onChange={(e) => handleFilterByGenre(e)}
+                className={style.filterGenre}
+              >
+                <option value="All">Genres</option>
 
-            <select onChange={(e) => handleFilterByCreated(e)}>
-              <option value="All">New-Created</option>
-              <option value="created">Creados</option>
-              <option value="api">Existentes</option>
-            </select>
+                {genres?.map((g, i) => {
+                  return (
+                    <option key={i} value={g.name}>
+                      {g.name}
+                    </option>
+                  );
+                })}
+              </select>
+
+              <select
+                onChange={(e) => handleFilterByCreated(e)}
+                className={style.filterCreated}
+              >
+                <option value="All">New-Created</option>
+                <option value="created">Creados</option>
+                <option value="api">Existentes</option>
+              </select>
+            </div>
           </nav>
         </div>
-          <span id='openNav' onClick={openNav}> &#x2630;</span>
+        <span id="openNav" onClick={openNav} className={style.openNav}>
+          {" "}
+          &#x2630;
+        </span>
 
         <h1 style={{ textAlign: "center" }}>Video Game List</h1>
         <SearchBar />

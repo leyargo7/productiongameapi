@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetail, deleteVideogame } from "../actions";
 import { useHistory } from "react-router-dom";
+import style from "./css/Detail.module.css";
+import Footer from "./Footer";
 
 const Detail = (props) => {
   const dispatch = useDispatch();
@@ -28,9 +30,9 @@ const Detail = (props) => {
   };
 
   return (
-    <div>
+    <div className={style.detail}>
       {Object.entries(myDetail).length > 0 ? (
-        <div>
+        <div className={style.container}>
           <h1>{myDetail.name}</h1>
           <img
             src={myDetail.image}
@@ -38,11 +40,11 @@ const Detail = (props) => {
             width="500px"
             height="700px"
           />
-          <p>Description: {myDetail.description.replace(/<[^>]*>?/g, "")}</p>
-          <p>Released: {myDetail.released}</p>
-          <p>Rating: {myDetail.rating}</p>
-          <p>Plataforms: {myDetail.platforms.map((p) => p).join(", ")}</p>
-          <p>Genres: {myDetail.genres.map((g) => g).join(", ")}</p>
+          <p className={style.description}><strong>Description:</strong> {myDetail.description.replace(/<[^>]*>?/g, "")}</p>
+          <p className={style.released}><strong>Released:</strong> {myDetail.released}</p>
+          <p className={style.rating}><strong>Rating:</strong> {myDetail.rating}</p>
+          <p className={style.platforms}><strong>Plataforms:</strong> {myDetail.platforms.map((p) => p).join(", ")}</p>
+          <p className={style.genres}><strong>Genres:</strong> {myDetail.genres.map((g) => g).join(", ")}</p>
 
           {myDetail.createdInDb ? (
             <div>
@@ -56,9 +58,11 @@ const Detail = (props) => {
       ) : (
         <h1>Loading...</h1>
       )}
-      <Link to="/home">
+      <Link to="/home" className={style.home}>
         <button>Go Home</button>
       </Link>
+
+      <Footer />
     </div>
   );
 };
