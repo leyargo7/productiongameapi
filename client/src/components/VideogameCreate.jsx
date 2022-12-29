@@ -8,6 +8,8 @@ import {
   updateVideogame,
 } from "../actions";
 import { Link, useHistory, useParams } from "react-router-dom";
+import style from './css/VideogameCreate.module.css'
+import Footer from "./Footer";
 
 function validate(input) {
   let errors = {};
@@ -171,8 +173,8 @@ const VideogameCreate = () => {
       </Link>
       {editing ? <h1>Edit Videogame</h1> : <h1>Create Videogame</h1>}
 
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <div>
+      <form onSubmit={(e) => handleSubmit(e)} className={style.form}>
+        <div className={style.name}>
           <label>Name:</label>
           <input
             type="text"
@@ -183,7 +185,7 @@ const VideogameCreate = () => {
           {errors.name && <p>{errors.name}</p>}
         </div>
 
-        <div>
+        <div className={style.description}>
           <label>Description:</label>
           <input
             type="text"
@@ -194,7 +196,7 @@ const VideogameCreate = () => {
           {errors.description && <p>{errors.description}</p>}
         </div>
 
-        <div>
+        <div className={style.released}>
           <label>Released:</label>
           <input
             type="text"
@@ -205,7 +207,7 @@ const VideogameCreate = () => {
           {errors.released && <p>{errors.released}</p>}
         </div>
 
-        <div>
+        <div className={style.rating}>
           <label>Rating:</label>
           <input
             type="number"
@@ -216,7 +218,7 @@ const VideogameCreate = () => {
           {errors.rating && <p>{errors.rating}</p>}
         </div>
 
-        <div>
+        <div className={style.image}>
           <label>Image:</label>
           <input
             type="text"
@@ -227,7 +229,7 @@ const VideogameCreate = () => {
           {errors.image && <p>{errors.image}</p>}
         </div>
 
-        <div>
+        <div className={style.platform}>
           <label>Platforms:</label>
           <select name="platforms" onChange={(e) => handleSelectPlatform(e)}>
             <option value=""></option>
@@ -254,7 +256,7 @@ const VideogameCreate = () => {
           </div>
         ))}
 
-        <div>
+        <div className={style.genres}>
           <label>Genres:</label>
           <select onChange={(e) => handleSelectGenre(e)}>
             <option value=""></option>
@@ -290,6 +292,8 @@ const VideogameCreate = () => {
           <p>We need all the data</p>
         )}
       </form>
+
+      <Footer />
     </div>
   );
 };

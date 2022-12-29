@@ -1,15 +1,17 @@
 .container {
-  
-    text-align: center;
-    
-    
+  text-align: center;
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  /* height: 30px; */
+  width: 100%;
 }
 
 .title {
-    background-color: black;
-    color: white;
+  background-color: black;
+  color: white;
 }
 
 .linkedin {
-    background-image: url('../../img/linkedin.png');
+  background-image: url("../../img/linkedin.png");
 }
