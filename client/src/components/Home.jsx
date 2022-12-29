@@ -51,15 +51,18 @@ const Home = () => {
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(getVideogames());
+    closeNav();
   };
 
   const handleFilterByGenre = (e) => {
     e.preventDefault();
     dispatch(filterByGenre(e.target.value));
+    closeNav();
   };
 
   const handleFilterByCreated = (e) => {
     dispatch(filterByCreated(e.target.value));
+    closeNav();
   };
 
   const handleOrderByName = (e) => {
@@ -67,49 +70,71 @@ const Home = () => {
     dispatch(orderByName(e.target.value));
     setCurrentPage(1);
     setOrder(e.target.value);
+    closeNav();
+  };
+
+  const openNav = () => {
+    
+    document.getElementById("myNav").style.width = "100%";
+  };
+
+  const closeNav = () => {
+    document.getElementById("myNav").style.width = "0%";
   };
 
   return (
     <div>
       <div>
-        <nav className={style.navbar}>
-          <Link to="/">
-            <button>Start</button>
-          </Link>
-          <Link to="/create">
-            <button>Create Video game</button>
-          </Link>
+        <div className={style.overlay} id="myNav">
+          <a
+            href="javascript:void(0)"
+            className={style.closebtn}
+            id="closeNav"
+            onClick={closeNav}
+          >
+            &times;
+          </a>
+          
+          
+          <nav className={style.navbar}>
+            <Link to="/">
+              <button>Start</button>
+            </Link>
+            <Link to="/create">
+              <button>Create Video game</button>
+            </Link>
 
-          <button onClick={(e) => handleClick(e)}>Cargar de nuevo</button>
+            <button onClick={(e) => handleClick(e)}>Cargar de nuevo</button>
 
-          <select onChange={(e) => handleOrderByName(e)}>
-            <option value="order">Order</option>
-            <option value="asc">Ascendente</option>
-            <option value="desc">Descendente</option>
-          </select>
+            <select onChange={(e) => handleOrderByName(e)}>
+              <option value="order">Order</option>
+              <option value="asc">Ascendente</option>
+              <option value="desc">Descendente</option>
+            </select>
 
-          <select onChange={(e) => handleFilterByGenre(e)}>
-            <option value="All">Genres</option>
+            <select onChange={(e) => handleFilterByGenre(e)}>
+              <option value="All">Genres</option>
 
-            {genres?.map((g, i) => {
-              return (
-                <option key={i} value={g.name}>
-                  {g.name}
-                </option>
-              );
-            })}
-          </select>
+              {genres?.map((g, i) => {
+                return (
+                  <option key={i} value={g.name}>
+                    {g.name}
+                  </option>
+                );
+              })}
+            </select>
 
-          <select onChange={(e) => handleFilterByCreated(e)}>
-            <option value="All">New-Created</option>
-            <option value="created">Creados</option>
-            <option value="api">Existentes</option>
-          </select>
+            <select onChange={(e) => handleFilterByCreated(e)}>
+              <option value="All">New-Created</option>
+              <option value="created">Creados</option>
+              <option value="api">Existentes</option>
+            </select>
+          </nav>
+        </div>
+          <span id='openNav' onClick={openNav}> &#x2630;</span>
 
-          <SearchBar />
-        </nav>
-
-        <h1 style={{textAlign: 'center'}}>Video Game List</h1>
+        <h1 style={{ textAlign: "center" }}>Video Game List</h1>
+        <SearchBar />
 
         <Paginado
           videogamesPerPage={videogamesPerPage}
