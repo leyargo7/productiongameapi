@@ -264,12 +264,17 @@ router.get("/videogame/:id", async (req, res) => {
 //ruta para encontrar o crear todos los generos
 router.get("/genres", async (req, res) => {
   try {
-    const genresApi = await fetch(
+    /* const genresApi = await fetch(
       `https://api.rawg.io/api/genres?key=${API_KEY}&page_size=50`
     );
     const genresApiJson = await genresApi.json();
 
-    const genres = genresApiJson.results.map((el) => el.name.split("-"));
+    const genres = genresApiJson.results.map((el) => el.name.split("-")); */
+
+    const genresApi = await axios.get(
+      `https://api.rawg.io/api/genres?key=${API_KEY}&page_size=50`
+    );
+    const genres = genresApi.data.results.map((el) => el.name.split("-"));
 
     const genresEach = genres.map((el) => {
       for (let i = 0; i < el.length; i++) {
