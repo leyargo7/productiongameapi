@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { Videogame, Genre } = require("../db.js");
 const { API_KEY } = process.env;
+const axios = require("axios");
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
@@ -12,10 +13,15 @@ const router = Router();
 
 // funcion para traer todos los videojuegos de la api por nombre
 const getApiVideogamesByName = async (name) => {
-  const apiUrl = await fetch(
+  /* const apiUrl = await fetch(
     `https://api.rawg.io/api/games?key=${API_KEY}&search=${name}&page_size=100`
   );
-  const apiInfo = await apiUrl.json();
+  const apiInfo = await apiUrl.json(); */
+
+  const apiUrl = await axios.get(
+    `https://api.rawg.io/api/games?key=${API_KEY}&search=${name}&page_size=100`
+  );
+  const apiInfo = apiUrl.data;
 
   const apiVideogamesByName = apiInfo.results.map((v) => {
     return {
@@ -31,13 +37,23 @@ const getApiVideogamesByName = async (name) => {
 // funcion para traer todos los videojuegos de la api
 
 const getApiVideogames = async () => {
-  const promise1 = fetch(
+  /* const promise1 = fetch(
     `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=1`
   );
   const promise2 = fetch(
     `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=2`
   );
   const promise3 = fetch(
+    `https://api.rawg.io/api/games?key=${API_KEY}&page_size=20&page=3`
+  ); */
+
+  const promise1 = axios.get(
+    `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=1`
+  );
+  const promise2 = axios.get(
+    `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=2`
+  );
+  const promise3 = axios.get(
     `https://api.rawg.io/api/games?key=${API_KEY}&page_size=20&page=3`
   );
 
@@ -47,9 +63,12 @@ const getApiVideogames = async () => {
     promise3,
   ]);
   const [apiInfo1, apiInfo2, apiInfo3] = await Promise.all([
-    response1.json(),
+    /* response1.json(),
     response2.json(),
-    response3.json(),
+    response3.json(), */
+    response1.data,
+    response2.data,
+    response3.data,
   ]);
 
   const apiVideogames = apiInfo1.results.concat(
@@ -106,10 +125,26 @@ const getAllVideogames = async () => {
 
 // funcion videojuegos por id desde la api
 const getApiVideogameById = async (id) => {
-  const apiUrl = await fetch(
+  /* const apiUrl = await fetch(
     `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
   );
   const apiInfo = await apiUrl.json();
+  const apiVideogameById = {
+    id: apiInfo.id,
+    name: apiInfo.name,
+    image: apiInfo.background_image,
+    description: apiInfo.description,
+    released: apiInfo.released,
+    rating: apiInfo.rating,
+    platforms: apiInfo.platforms.map((p) => p.platform.name),
+    genres: apiInfo.genres.map((g) => g.name),
+  };
+  return apiVideogameById; */
+
+  const apiUrl = await axios.get(
+    `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
+  )
+  const apiInfo = apiUrl.data;
   const apiVideogameById = {
     id: apiInfo.id,
     name: apiInfo.name,
@@ -275,13 +310,23 @@ router.get("/genresDb", async (req, res) => {
 
 //ruta para traer plataformas de la api
 router.get("/platforms", async (req, res) => {
-  const promise1 = fetch(
+  /* const promise1 = fetch(
     `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=1`
   );
   const promise2 = fetch(
     `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=2`
   );
   const promise3 = fetch(
+    `https://api.rawg.io/api/games?key=${API_KEY}&page_size=20&page=3`
+  ); */
+
+  const promise1 = axios.get(
+    `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=1`
+  );
+  const promise2 = axios.get(
+    `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40&page=2`
+  );
+  const promise3 = axios.get(
     `https://api.rawg.io/api/games?key=${API_KEY}&page_size=20&page=3`
   );
 
@@ -291,9 +336,13 @@ router.get("/platforms", async (req, res) => {
     promise3,
   ]);
   const [apiInfo1, apiInfo2, apiInfo3] = await Promise.all([
-    response1.json(),
+
+    /* response1.json(),
     response2.json(),
-    response3.json(),
+    response3.json(), */
+    response1.data,
+    response2.data,
+    response3.data,
   ]);
 
   const apiVideogames = apiInfo1.results.concat(
