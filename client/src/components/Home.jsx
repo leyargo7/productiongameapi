@@ -9,6 +9,7 @@ import {
   filterByCreated,
   orderByName,
   setLoading,
+  errorResponse,
 } from "../actions";
 import Loader from "./Loader";
 import Card from "./Card";
@@ -38,12 +39,21 @@ const Home = () => {
 
   const paginado = (pageNumber) => setCurrentPage(pageNumber);
 
+  const onPrevClick = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const onNextClick = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch(setLoading(true));
       await dispatch(getVideogames());
       await dispatch(getGenresDb());
       dispatch(setLoading(false));
+      dispatch(errorResponse(""));
     };
     fetchData();
   }, [dispatch]);
@@ -82,19 +92,14 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className={style.container}>
       <div>
         <div className={style.overlay} id="myNav">
-          <a
-            href="javascript:void(0)"
-            className={style.closebtn}
-            id="closeNav"
-            onClick={closeNav}
-          >
+          <button className={style.closebtn} id="closeNav" onClick={closeNav}>
             &times;
-          </a>
-
-          <nav >
+          </button>
+          
+          <nav>
             <Link to="/">
               <button className={style.start}>Welcome</button>
             </Link>
@@ -146,13 +151,17 @@ const Home = () => {
           &#x2630;
         </span>
 
-        <h1 style={{ textAlign: "center" }}>Video Game List</h1>
-        <SearchBar />
+        <h1 className={style.titleGames}>Video Games</h1>
 
+        <SearchBar />
         <Paginado
           videogamesPerPage={videogamesPerPage}
           allVideogames={allVideogames.length}
+          currentPage={currentPage}
+          onPrevClick={onPrevClick} 
+          onNextClick={onNextClick}
           paginado={paginado}
+                
         />
       </div>
 
@@ -180,10 +189,14 @@ const Home = () => {
       </div>
 
       <Paginado
-        videogamesPerPage={videogamesPerPage}
-        allVideogames={allVideogames.length}
-        paginado={paginado}
-      />
+          videogamesPerPage={videogamesPerPage}
+          allVideogames={allVideogames.length}
+          currentPage={currentPage}
+          onPrevClick={onPrevClick} 
+          onNextClick={onNextClick}
+          paginado={paginado}
+                
+        />
 
       <Footer />
     </div>

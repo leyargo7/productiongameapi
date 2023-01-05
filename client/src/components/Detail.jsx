@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetail, deleteVideogame } from "../actions";
 import { useHistory } from "react-router-dom";
+import Loader from "./Loader";
 import style from "./css/Detail.module.css";
 import Footer from "./Footer";
 
@@ -47,7 +48,7 @@ const Detail = (props) => {
           <p className={style.genres}><strong>Genres:</strong> {myDetail.genres.map((g) => g).join(", ")}</p>
 
           {myDetail.createdInDb ? (
-            <div>
+            <div className={style.btns}>
               <button onClick={() => history.push(`/home/${myDetail.id}/edit`)}>Edit</button>
               <button onClick={e=>handleDelete(e)}>Delete</button>
             </div>
@@ -56,7 +57,7 @@ const Detail = (props) => {
           )}
         </div>
       ) : (
-        <h1>Loading...</h1>
+        <Loader />
       )}
       <Link to="/home" className={style.home}>
         <button>Go Home</button>

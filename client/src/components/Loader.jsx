@@ -1,8 +1,12 @@
 import React from 'react'
+import style from './css/Loader.module.css'
 
 const Loader = () => {
   return (
-    <h1>Loading...</h1>
+    <div className={style.container}>
+      <div className={style.ldshourglass}></div>
+
+    </div>
   )
 }
 

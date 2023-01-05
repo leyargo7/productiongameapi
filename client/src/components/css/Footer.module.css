@@ -1,4 +1,5 @@
 .container {
+  
   text-align: center;
   position: fixed;
   left: 0px;
@@ -15,3 +16,4 @@
 .linkedin {
   background-image: url("../../img/linkedin.png");
 }
+

@@ -6,33 +6,29 @@ import {
   getPlatforms,
   getDetail,
   updateVideogame,
+  errorResponse
 } from "../actions";
 import { Link, useHistory, useParams } from "react-router-dom";
-import style from './css/VideogameCreate.module.css'
+import style from "./css/VideogameCreate.module.css";
 import Footer from "./Footer";
 
 function validate(input) {
   let errors = {};
+
   if (!input.name) {
-    errors.name = "Name is required";
-  }
-  if (!input.description) {
-    errors.description = "Description is required";
-  }
-  if (!input.released) {
-    errors.released = "Released is required";
-  }
-  if (!input.rating) {
-    errors.rating = "Rating is required";
-  }
-  if (!input.platforms) {
+    errors.name = "The name must have between 3 and 50 characters";
+  } else if (!input.description) {
+    errors.description = "Description must be between 10 and 500 characters";
+  } else if (!input.released) {
+    errors.released = "Released: The Date must be in the format YYYY-MM-DD";
+  } else if (!input.rating) {
+    errors.rating = "Rating: must be a number between 0.1 and 5.0";
+  } else if (!input.platforms) {
     errors.platforms = "Platforms is required";
-  }
-  if (!input.genres) {
+  } else if (!input.genres) {
     errors.genres = "Genres is required";
-  }
-  if (!input.image) {
-    errors.image = "Image is required";
+  } else if (!input.image) {
+    errors.image = "Image: must be a valid URL";
   }
   return errors;
 }
@@ -45,6 +41,8 @@ const VideogameCreate = () => {
   const genres = useSelector((state) => state.genres);
   const platforms = useSelector((state) => state.platforms);
   const detail = useSelector((state) => state.detail);
+  
+  const errorRes = useSelector((state) => state.errorResponse);
 
   const [input, setInput] = useState({
     name: "",
@@ -58,8 +56,10 @@ const VideogameCreate = () => {
 
   const [editing, setEditing] = useState(false);
   const [errors, setErrors] = useState({});
+  
 
   useEffect(() => {
+    
     if (params.id) {
       setEditing(true);
       dispatch(getDetail(params.id));
@@ -79,7 +79,17 @@ const VideogameCreate = () => {
     };
 
     fetchData();
-  }, [dispatch, params.id]);
+
+      
+    if(errorRes.errors){
+      alert("Please correct the errors")
+    }
+    if(errorRes.createdInDb){
+      alert("Videogame created successfully");
+      history.push("/home");
+    }
+  
+  }, [dispatch, params.id, errorRes]);
 
   const handleChange = (e) => {
     setInput({
@@ -100,13 +110,6 @@ const VideogameCreate = () => {
       ...input,
       platforms: [...input.platforms, e.target.value],
     });
-
-    setErrors(
-      validate({
-        ...input,
-        [e.target.name]: e.target.value,
-      })
-    );
   };
 
   const handleSelectGenre = (e) => {
@@ -114,6 +117,12 @@ const VideogameCreate = () => {
       ...input,
       genres: [...input.genres, e.target.value],
     });
+    setErrors(
+      validate({
+        ...input,
+        [e.target.name]: e.target.value,
+      })
+    );
   };
 
   const handleSubmit = (e) => {
@@ -137,8 +146,8 @@ const VideogameCreate = () => {
         return;
       } else {
         dispatch(postVideogame(input));
-        alert("Videogame created successfully");
-        setInput({
+
+        /* setInput({
           name: "",
           description: "",
           released: "",
@@ -146,11 +155,14 @@ const VideogameCreate = () => {
           platforms: [],
           genres: [],
           image: "",
-        });
+        });  */
+        /* alert("Videogame created successfully");
+        history.push("/home"); */
       }
-      history.push("/home");
     }
   };
+
+
 
   const handleDeletePlatform = (el) => {
     setInput({
@@ -166,23 +178,38 @@ const VideogameCreate = () => {
     });
   };
 
+
   return (
-    <div>
+    <div className={style.createForm}>
       <Link to="/home">
-        <button>Back</button>
+        <button className={style.back}>Back</button>
       </Link>
       {editing ? <h1>Edit Videogame</h1> : <h1>Create Videogame</h1>}
 
-      <form onSubmit={(e) => handleSubmit(e)} className={style.form}>
+      {  
+          errorRes && errorRes.errors && errorRes.errors.map((e, i) => {
+            return (
+              <div key={i} className={style.setErrors}>
+                <p>&#10071; {e.message}</p>
+              </div>
+            )
+          })
+       }
+      
+
+      <form onSubmit={(e) => handleSubmit(e)} className={style.form} autoComplete="off">
         <div className={style.name}>
           <label>Name:</label>
           <input
             type="text"
             name="name"
             value={input.name}
+            
             onChange={(e) => handleChange(e)}
           />
-          {errors.name && <p>{errors.name}</p>}
+          {errors.name && (
+            <p className={`${style.toast} ${style.appear}`}>{errors.name}</p>
+          )}
         </div>
 
         <div className={style.description}>
@@ -193,18 +220,28 @@ const VideogameCreate = () => {
             value={input.description}
             onChange={(e) => handleChange(e)}
           />
-          {errors.description && <p>{errors.description}</p>}
+          {errors.description && (
+            <p className={`${style.toast} ${style.appear}`}>
+              {errors.description}
+            </p>
+          )}
         </div>
 
+        
         <div className={style.released}>
           <label>Released:</label>
           <input
             type="text"
             name="released"
+            placeholder="yyyy-mm-dd"
             value={input.released}
             onChange={(e) => handleChange(e)}
           />
-          {errors.released && <p>{errors.released}</p>}
+          {errors.released && (
+            <p className={`${style.toast} ${style.appear}`}>
+              {errors.released}
+            </p>
+          )}
         </div>
 
         <div className={style.rating}>
@@ -212,10 +249,16 @@ const VideogameCreate = () => {
           <input
             type="number"
             name="rating"
+            placeholder="0.1 - 5.0"
+            step="0.1"
+            min="0.1"
+            max="5"
             value={input.rating}
             onChange={(e) => handleChange(e)}
           />
-          {errors.rating && <p>{errors.rating}</p>}
+          {errors.rating && (
+            <p className={`${style.toast} ${style.appear}`}>{errors.rating}</p>
+          )}
         </div>
 
         <div className={style.image}>
@@ -226,7 +269,9 @@ const VideogameCreate = () => {
             value={input.image}
             onChange={(e) => handleChange(e)}
           />
-          {errors.image && <p>{errors.image}</p>}
+          {errors.image && (
+            <p className={`${style.toast} ${style.appear}`}>{errors.image}</p>
+          )}
         </div>
 
         <div className={style.platform}>
@@ -241,16 +286,10 @@ const VideogameCreate = () => {
               );
             })}
           </select>
-
-          {errors.platforms && <p>{errors.platforms}</p>}
         </div>
 
-        {/* <ul>
-          <li>{input.platforms.map((el) => el + ", ")}</li>
-        </ul> */}
-
-        {input.platforms.map((el) => (
-          <div>
+        {input.platforms.map((el, i) => (
+          <div key={i}>
             <p>{el}</p>
             <button onClick={() => handleDeletePlatform(el)}>X</button>
           </div>
@@ -268,11 +307,10 @@ const VideogameCreate = () => {
               );
             })}
           </select>
-          {errors.genres && <p>{errors.genres}</p>}
         </div>
 
-        {input.genres.map((el) => (
-          <div>
+        {input.genres.map((el, i) => (
+          <div key={i}>
             <p>{el}</p>
             <button onClick={() => handleDeleteGenre(el)}>X</button>
           </div>
@@ -285,13 +323,15 @@ const VideogameCreate = () => {
         input.platforms.length > 0 &&
         input.genres.length > 0 &&
         input.image ? (
-          <button type="submit">
+          <button type="submit" className={style.btnCreate}>
             {editing ? "Edit Videogame" : "Create Videogame"}
           </button>
         ) : (
-          <p>We need all the data</p>
+          <p className={style.messageInfo}>We need all the data</p>
         )}
       </form>
+
+      <div className={style.last}></div>
 
       <Footer />
     </div>

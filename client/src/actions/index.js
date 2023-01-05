@@ -60,26 +60,34 @@ export function getDetail(payload) {
   };
 }
 
+
 export function postVideogame(payload) {
-  return async function (dispatch) {
-    const data = await fetch("http://localhost:3001/videogame", {
+  let obj;
+  return function (dispatch) {
+    fetch("http://localhost:3001/videogame", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", 
       },
       body: JSON.stringify(payload),
-    });
-    const dataInfo = await data.json();
-    return dispatch({
-      type: "POST_VIDEOGAME",
-      payload: dataInfo,
-    });
+    })
+      .then((res) => res.json())
+      .then ((res) => {
+        obj = res;
+        
+      })
+      .then((res) => dispatch({ type: "POST_VIDEOGAME", payload: obj }))
+      .catch((err) => { 
+        console.log(err);
+      });
+    
+    
   };
 }
 
 //ruta update
 export function updateVideogame(payload) {
-    console.log(payload.id)
+  
   return async function (dispatch) {
     const data = await fetch(`http://localhost:3001/videogame/${payload.id}`, {
       method: "PUT",
@@ -172,3 +180,12 @@ export function orderByName(payload) {
     payload,
   };
 }
+
+//errorResponse
+export function errorResponse(payload) {
+  return {
+    type: "ERROR_RESPONSE",
+    payload,
+  };
+}
+

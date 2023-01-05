@@ -63,7 +63,6 @@ const getApiVideogames = async () => {
       name: v.name,
       image: v.background_image,
       genres: v.genres.map((g) => g.name),
-      
     };
   });
   return apiVideogamesMapped;
@@ -98,10 +97,8 @@ const getAllVideogames = async () => {
       genres: v.genres.map((g) => g.name),
       image: v.image,
       createdInDb: true,
-
     };
   });
-
 
   const allVideogames = apiVideogames.concat(dbGames);
   return allVideogames;
@@ -157,12 +154,10 @@ router.get("/videogamesname", async (req, res) => {
   try {
     const gameName = await getApiVideogamesByName(name);
     res.status(200).send(gameName);
-
   } catch (error) {
     res.status(404).send({ message: "No se encontró el juego" });
   }
-})
-
+});
 
 // ruta para traer todos los videojuegos por nombre o todos
 router.get("/videogames", async (req, res) => {
@@ -278,10 +273,6 @@ router.get("/genresDb", async (req, res) => {
   res.status(200).send(dataInfo);
 });
 
-
-
-
-
 //ruta para traer plataformas de la api
 router.get("/platforms", async (req, res) => {
   const promise1 = fetch(
@@ -324,22 +315,29 @@ router.get("/platforms", async (req, res) => {
     });
   });
 
-  const platformSet = [...new Set(platforms)].sort(
-    (a, b) => a.toLowerCase().localeCompare(b.toLowerCase())
+  const platformSet = [...new Set(platforms)].sort((a, b) =>
+    a.toLowerCase().localeCompare(b.toLowerCase())
   );
-   
+
   res.status(200).send(platformSet);
 });
 
-
-
-
-
 //ruta para hacer post de un videojuego
 router.post("/videogame", async (req, res) => {
-  const { name, description, released, rating, platforms, genres, image } = req.body;
-  try {
-    if (name && description && released && rating && platforms && genres) {
+  const { name, description, released, rating, platforms, genres, image } =
+    req.body;
+  if(genres.length === 0){
+    res.status(400).send({
+      name: "SequelizeValidationError",
+      errors:[
+        {
+          message: "Genres: Select one or more genres"
+        }
+        ],
+      })
+  }else{
+
+    try {
       const newVideogame = await Videogame.create({
         name,
         description,
@@ -348,25 +346,24 @@ router.post("/videogame", async (req, res) => {
         platforms,
         image,
       });
-
-      
+  
       const genresDb = await Genre.findAll({
         where: { name: genres },
       });
       newVideogame.addGenres(genresDb);
-      
       res.status(200).send(newVideogame);
-    } else {
-      res.status(404).send({ message: "Faltan datos" });
+  
+      /* if (name && description && released && rating && platforms && genres) {
+      }  */
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        res.status(400).send(error);
+      } else {  
+        res.status(500).send(error);
+      }
     }
-  } catch {
-    res.status(404).send(error.message);
   }
 });
-
-
-
-
 
 //ruta put para modificar un videojuego
 router.put("/videogame/:id", async (req, res) => {
@@ -394,11 +391,6 @@ router.put("/videogame/:id", async (req, res) => {
   }
 });
 
-
-
-
-
-
 //ruta delete para eliminar un videojuego
 router.delete("/videogame/:id", async (req, res) => {
   const { id } = req.params;
@@ -411,25 +403,22 @@ router.delete("/videogame/:id", async (req, res) => {
   }
 });
 
-
 //probando
-router.get('/reviews', async(req, res) => {
-  try{
-    const all = await getApiVideogames()
-    const allMapped = all.map(el => {
+router.get("/reviews", async (req, res) => {
+  try {
+    const all = await getApiVideogames();
+    const allMapped = all.map((el) => {
       return {
         id: el.id,
         name: el.name,
         image: el.image,
         rating: el.rating,
-        
-      }
-    })
-    res.status(200).send(allMapped)
-
-  }catch(error){
-    res.status(404).send(error.message)
+      };
+    });
+    res.status(200).send(allMapped);
+  } catch (error) {
+    res.status(404).send(error.message);
   }
-})
+});
 
 module.exports = router;

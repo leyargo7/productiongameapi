@@ -5,11 +5,18 @@ const initialState = {
     allVideogames: [],
     genres: [],
     platforms: [],
-    detail: []
+    detail: [],
+    post: [],
+    errorResponse: [],
+    
+    
+    
+ 
 };
 function rootReducer(state = initialState, action) {
     switch (action.type) {
 
+            
         case "SET_LOADING":
             return {
                 ...state,
@@ -53,7 +60,18 @@ function rootReducer(state = initialState, action) {
         case "POST_VIDEOGAME":
             return {
                 ...state,
+                post: action.payload,
+                errorResponse: action.payload
+                
             }
+        
+        case "ERROR_RESPONSE":
+            return {
+                ...state,
+                errorResponse: action.payload,
+            }
+    
+
 
         case "UPDATE_VIDEOGAME":
             {
@@ -118,6 +136,7 @@ function rootReducer(state = initialState, action) {
             }
 
 
+        
 
         default:
             return state;

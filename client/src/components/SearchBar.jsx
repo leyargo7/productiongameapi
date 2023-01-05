@@ -9,27 +9,31 @@ const SearchBar = () => {
     const dispatch = useDispatch()
     const [name, setName] = useState('')
 
-    const handleInputChange = (e) => {
+    /* const handleInputChange = (e) => {
         e.preventDefault()
         setName(e.target.value)
-    }
+    } */
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setName(e.target.value)
         dispatch(getNameVideogame(name))
-        setName('')
+        /* setName('') */
     }
 
-
+    
   return (
     <div className={style.search}>
+      <div>
+
         <input type="text" 
         placeholder="Search..."
         value={name}
-        onChange={e=>handleInputChange(e)}
+        onChange={e=>handleSubmit(e)}
         />
+      </div>
 
-        <button type='submit' onClick={e=>handleSubmit(e)}>Search</button>
+       {/*  <button type='submit' onClick={e=>handleSubmit(e)}>Search</button> */}
     </div>
   )
 }
