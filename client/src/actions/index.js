@@ -1,3 +1,5 @@
+const serverUrl = "https://productiongameapi-production.up.railway.app"
+
 export function setLoading(payload) {
   return {
     type: "SET_LOADING",
@@ -7,7 +9,7 @@ export function setLoading(payload) {
 
 export function getVideogames() {
   return async function (dispatch) {
-    const data = await fetch("http://localhost:3001/videogames");
+    const data = await fetch(`${serverUrl}/videogames`);
     const dataInfo = await data.json();
     return dispatch({
       type: "GET_VIDEOGAMES",
@@ -20,7 +22,7 @@ export function getNameVideogame(payload) {
   return async function (dispatch) {
     try {
       const data = await fetch(
-        `http://localhost:3001/videogamesname?name=${payload}`
+        `${serverUrl}/videogamesname?name=${payload}`
       );
       const dataInfo = await data.json();
       return dispatch({
@@ -43,7 +45,7 @@ export function getNameVideogame(payload) {
 export function getDetail(payload) {
   return async function (dispatch) {
     try {
-      const data = await fetch(`http://localhost:3001/videogame/${payload}`);
+      const data = await fetch(`${serverUrl}/videogame/${payload}`);
       const dataInfo = await data.json();
       return dispatch({
         type: "GET_DETAILS",
@@ -64,7 +66,7 @@ export function getDetail(payload) {
 export function postVideogame(payload) {
   let obj;
   return function (dispatch) {
-    fetch("http://localhost:3001/videogame", {
+    fetch(`${serverUrl}/videogame`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json", 
@@ -89,7 +91,7 @@ export function postVideogame(payload) {
 export function updateVideogame(payload) {
   
   return async function (dispatch) {
-    const data = await fetch(`http://localhost:3001/videogame/${payload.id}`, {
+    const data = await fetch(`${serverUrl}/videogame/${payload.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +110,7 @@ export function updateVideogame(payload) {
 export function deleteVideogame(payload) {
   return async function (dispatch) {
     try {
-      const data = await fetch(`http://localhost:3001/videogame/${payload}`, {
+      const data = await fetch(`${serverUrl}/videogame/${payload}`, {
         method: "DELETE",
       });
       const dataInfo = await data.json();
@@ -129,7 +131,7 @@ export function deleteVideogame(payload) {
 
 export function getGenresDb() {
   return async function (dispatch) {
-    const data = await fetch("http://localhost:3001/genresDb");
+    const data = await fetch(`${serverUrl}/genresDb`);
     const dataInfo = await data.json();
 
     return dispatch({
@@ -146,7 +148,7 @@ export function getGenresDb() {
 //filtro por plataforma de la api
 export function getPlatforms() {
   return async function (dispatch) {
-    const data = await fetch("http://localhost:3001/platforms");
+    const data = await fetch(`${serverUrl}/platforms`);
     const dataInfo = await data.json();
 
     return dispatch({
