@@ -1,6 +1,6 @@
 //const serverUrl = "https://productiongameapi-production.up.railway.app"
 //const serverUrl = "https://c595-2800-e2-4f80-24a-251a-ea0d-a1b1-dab0.ngrok.io"
-const serverUrl = "https://bbc7-181-49-18-125.ngrok.io"
+const serverUrl = "https://2f25-181-49-18-125.ngrok.io"
 
 export function setLoading(payload) {
   return {
@@ -11,11 +11,7 @@ export function setLoading(payload) {
 
 export function getVideogames() {
   return async function (dispatch) {
-    const data = await fetch(`${serverUrl}/videogames`, {
-      'headers': {
-        'Access-Control-Allow-Origin': 'https://productiongameapi.vercel.app/'
-      }
-    });
+    const data = await fetch(`${serverUrl}/videogames`);
     const dataInfo = await data.json();
     return dispatch({
       type: "GET_VIDEOGAMES",
