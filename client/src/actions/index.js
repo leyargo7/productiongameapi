@@ -1,5 +1,6 @@
 //const serverUrl = "https://productiongameapi-production.up.railway.app"
-const serverUrl = "https://c595-2800-e2-4f80-24a-251a-ea0d-a1b1-dab0.ngrok.io"
+//const serverUrl = "https://c595-2800-e2-4f80-24a-251a-ea0d-a1b1-dab0.ngrok.io"
+const serverUrl = "https://279e-2800-e2-4f80-24a-251a-ea0d-a1b1-dab0.ngrok.io"
 
 export function setLoading(payload) {
   return {
