@@ -11,7 +11,12 @@ export function setLoading(payload) {
 
 export function getVideogames() {
   return async function (dispatch) {
-    const data = await fetch(`${serverUrl}/videogames`);
+    const data = await fetch(`${serverUrl}/videogames`, {
+      'mode': 'cors',
+      'headers': {
+        'Access-Control-Allow-Origin': 'https://productiongameapi.vercel.app/'
+      }
+    });
     const dataInfo = await data.json();
     return dispatch({
       type: "GET_VIDEOGAMES",
