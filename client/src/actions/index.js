@@ -1,5 +1,5 @@
-const serverUrl = "https://productiongameapi-production.up.railway.app"
-
+//const serverUrl = "https://productiongameapi-production.up.railway.app"
+const serverUrl = "https://purple-results-walk-181-49-18-125.loca.lt"
 
 export function setLoading(payload) {
   return {
